@@ -6,7 +6,7 @@ function level1Test:enter(prev,a,b)
   self.t = 0
   self.dt = 0
 
-  self.testObj = Baby(600,50)
+  self.testObj = Baby(100,100)
 
   self.Grid = require("libs.grid")
   self.PathFinder = require("libs.pathfinder")
@@ -119,7 +119,7 @@ function level1Test:update(dt)
 
 
   if self.dt >= 0.2 then
-    self.testObj:Behavior()
+    self.testObj:Behavior(self.map)
     self.t = self.t + 0.01
     self.dt = 0
   end
