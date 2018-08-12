@@ -6,10 +6,8 @@ function level1Test:enter(prev,a,b)
   self.t = 0
   self.dt = 0
 
-  self.testObj = Baby(3,3)
 
-  self.Grid = require("libs.grid")
-  self.PathFinder = require("libs.pathfinder")
+
 
   self.map = {}
   local i = 0
@@ -48,7 +46,7 @@ for i,k in ipairs(self.map) do
   print()
 end
 
-
+  self.testObj = Baby(3,3,self.map)
 end
 
 
@@ -80,15 +78,16 @@ function level1Test:draw()
   end
 
   love.graphics.setColor(255,255,255)
-  love.graphics.rectangle("line",self.testObj.x,self.testObj.y,50,50)
+  love.graphics.rectangle("line",self.testObj.x,self.testObj.y,50,50)--draws baby
+  love.graphics.print("x "..self.testObj.x.." y "..self.testObj.y,150,150)
 
-  for i,v in ipairs(self.testObj.spawnedObjects) do
+  for i,v in ipairs(self.testObj.spawnedObjects) do--draws puke i guess
     love.graphics.setColor(v.rgba)
     love.graphics.rectangle("fill", v.x,v.y,v.width,v.height)
 
   end
 
-  
+
 
 end
 
@@ -99,7 +98,7 @@ function level1Test:update(dt)
   self.dt = self.dt + dt
 
 
-  if self.dt >= 0.2 then
+  if self.dt >= 1 then
     self.testObj:Behavior(self.map)
     self.t = self.t + 0.01
     self.dt = 0

@@ -63,16 +63,16 @@ if (...) then
   local pairs = pairs
   local assert = assert
   local setmetatable, getmetatable = setmetatable, getmetatable
-	
+
 	-- Type function ovverride, to support integers
 	local otype = type
-	local isInt = function(v) 
-		return otype(v) == 'number' and floor(v) == v and 'int' or nil 
+	local isInt = function(v)
+		return otype(v) == 'number' and floor(v) == v and 'int' or nil
 	end
 	local type = function(v)
 		return isInt(v) or otype(v)
 	end
-	
+
   -- Dependancies
   local _PATH = (...):gsub('%.pathfinder$','')
   local Heap      = require (_PATH .. '.core.bheap')
@@ -87,7 +87,7 @@ if (...) then
 
   -- Available search algorithms
   local Finders = {
-    ['ASTAR']     = require (_PATH .. '.search.astar'),	
+    ['ASTAR']     = require (_PATH .. '.search.astar'),
     ['DIJKSTRA']  = require (_PATH .. '.search.dijkstra'),
     ['BFS']       = require (_PATH .. '.search.bfs'),
     ['DFS']       = require (_PATH .. '.search.dfs'),
@@ -218,9 +218,9 @@ if (...) then
   function Pathfinder:setFinder(finderName)
 		local finderName = finderName
 		if not finderName then
-			if not self.finder then 
-				finderName = 'ASTAR' 
-			else return 
+			if not self.finder then
+				finderName = 'ASTAR'
+			else return
 			end
 		end
     assert(Finders[finderName],'Not a valid finder name!')
@@ -328,10 +328,11 @@ if (...) then
     local startNode = self.grid:getNodeAt(startX, startY)
     local endNode = self.grid:getNodeAt(endX, endY)
     assert(startNode, ('Invalid location [%d, %d]'):format(startX, startY))
+		assert(endNode,"yooo")
     assert(endNode and self.grid:isWalkableAt(endX, endY),
       ('Invalid or unreachable location [%d, %d]'):format(endX, endY))
     local _endNode = Finders[self.finder](self, startNode, endNode, toClear, tunnel)
-    if _endNode then 
+    if _endNode then
 			return traceBackPath(self, _endNode, startNode), lastPathCost
     end
     lastPathCost = 0

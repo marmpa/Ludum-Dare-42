@@ -4,8 +4,8 @@ local BabyAi = require "scripts.babyAI"
 Baby = Class{
   __includes = BabyAi;
 
-  init = function(self,x,y)
-    BabyAi.init(self,x,y)
+  init = function(self,x,y,map)
+    BabyAi.init(self,x,y,map)
     self.status = nil
   end;
 
