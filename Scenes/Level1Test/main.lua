@@ -6,7 +6,7 @@ function level1Test:enter(prev,a,b)
   self.t = 0
   self.dt = 0
 
-  self.testObj = Baby(100,100)
+  self.testObj = Baby(3,3)
 
   self.Grid = require("libs.grid")
   self.PathFinder = require("libs.pathfinder")
@@ -48,20 +48,9 @@ for i,k in ipairs(self.map) do
   print()
 end
 
-print(type(self.map).." "..type(self.map[1]))
-
-  self.walkable="0"--The error was that the data was written in string and not as number
-  self.grid = self.Grid(self.map)
-  self.myFinder = self.PathFinder(self.grid,'JPS',self.walkable)
-
-  local startx,starty =1,1
-  local endx,endy = 5,1
-
-  self.path,self.pathLen = self.myFinder:getPath(startx,starty,endx,endy)
-  print(self.path)
-  print(#self.map[1])
 
 end
+
 
 function level1Test:draw()
   love.graphics.print(self.ab,100,100)
@@ -99,15 +88,7 @@ function level1Test:draw()
 
   end
 
-  if self.path then
-    print(('Path from [%d,%d] to [%d,%d] found! Length: %.2f')
-  	:format(1, 1,5,1, self.pathLen))
-    for node, count in self.path:iter() do--Now works the path finding stuff
-  	  print(('Step: %d - x: %d - y: %d'):format(count, node.x, node.y))
-  	end
-  else
-    print("noo")
-  end
+  
 
 end
 

@@ -5,11 +5,13 @@ local PathFinder = require("libs.pathfinder")
 --Handles Baby Behavior in general
 local BabyAI = Class{
   walkable="0";
+  positionFromLeft = .1 * love.graphics.getWidth();
+  positionFromTop = 0.25 * love.graphics.getHeight();
   init = function(self,x,y)
     self.tempPos = 5
     self.x = x or 0
     self.y = y or 0
-    self.needsLockon = true
+    self.needsLockOn = true
     self.spawnedObjects = {}
   end;
 
@@ -30,8 +32,11 @@ local BabyAI = Class{
       self.grid = Grid(map)
       self.myFinder = PathFinder(self.grid,'JPS',self.walkable)
 
-      local startx,starty = self.x/100,self.y/100
+      local startx,starty = self:WorldToMapPoints(self.x,self.y) -- starting point
       local endx,endy = coordX,coordY
+
+      print(startx,starty,"Startx, Starty")
+      print(endx,endy,"endx, endy")
 
       self.path,self.pathLen = self.myFinder:getPath(startx,starty,endx,endy)
     end
@@ -55,16 +60,16 @@ local BabyAI = Class{
       return
     end
 
-    self.x = nodeX*50
-    self.y = nodeY*50
+    self.x,self.y = self:MapToWorldPoints(nodeX,nodeY)
     self.tempPos = -self.tempPos
+    self.needsLockOn = true
   end;
 
   Lockon = function(self,map)
     --Assuming that mapDimensions will be given like this
     --map = {x=1,y=2}
 
-    if(not self.needsLockon) then
+    if(not self.needsLockOn) then
       print("nai baba")
       return nil
     end
@@ -74,7 +79,7 @@ local BabyAI = Class{
     local coords = self:ReturnValidCoordinatesFunc(map)--Calling function to find coordinates
     local coordX,coordY = coords[1],coords[2]
 
-    print(coordX.."axaaaaaaaaaaa")
+    print(coordX.." "..coordY.."axaaaaaaaaaaa")
     return coordX,coordY
   end;
 
@@ -85,16 +90,16 @@ local BabyAI = Class{
   ReturnValidCoordinatesFunc = function(self,map)
     --This function returns a random set of coordinates
     --Map like : {{5,4},{2,3}}
-    local randomNumber1,randomNumber2=2,2
+    local randomNumber1,randomNumber2
     local val = false
     repeat
       --find two random coordinates for baby to wonder to
-      local randomNumber1 = math.random(1,#map)
-      local randomNumber2 = math.random(1,#map[randomNumber1])
+      randomNumber1 = math.random(1,#map)
+      randomNumber2 = math.random(1,#map[randomNumber1])
 
 
 
-      if(map[randomNumber1][randomNumber2]==self.walkable) then --if the baby can walk at that point
+      if(tostring(map[randomNumber1][randomNumber2])==self.walkable) then --if the baby can walk at that point
         val=true
       end
     until(val)
@@ -108,7 +113,19 @@ local BabyAI = Class{
     if math.random() > 0.9 then
       table.insert(self.spawnedObjects,{x= self.x + 5*math.random(1,10) * math.oneorminusone(),y=self.y,width=30,height=30, type = "puke",rgba={math.random(),.5,math.random(),1}})
     end
-  end
+  end;
+
+  MapToWorldPoints = function(self,x,y)--returns a coordinates so we can draw babys
+    return x*self.positionFromLeft,y*self.positionFromTop
+  end;
+
+  WorldToMapPoints = function(self,x,y)--returns world pixel to map points
+    if(x/self.positionFromLeft<1) then
+      print("hey ---------------------------")
+      return x,y
+    end
+    return x/self.positionFromLeft,y/self.positionFromTop
+  end;
 }
 
 return BabyAI
