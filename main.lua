@@ -2,6 +2,8 @@ Gamestate = require "libs.gamestate"
 
 scenes = {}
 scenes.scene1 = require "Scenes.level1Test.main"
+scenes.scene2 = require "Scenes.EndingScreen.main"
+scenes.scene3 = require "Scenes.Menu.main"
 
 font = nil
 
@@ -18,7 +20,7 @@ function love.load()
   love.graphics.setFont(font)
 
   Gamestate.registerEvents()
-  Gamestate.switch(scenes.scene1,6,5)
+  Gamestate.switch(scenes.scene3)
 end
 
 function love.keypressed(key, scancode, isrepeat)
